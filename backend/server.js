@@ -21,7 +21,7 @@ app.get("*", (req, res) => {
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors());
+app.use(cors({ origin: "http://51.17.202.182:3000" }));
 app.use("/api/v1", userRoutes);
 
 app.listen(process.env.PORT, () =>{
