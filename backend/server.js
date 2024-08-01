@@ -13,24 +13,30 @@ connectDB();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+// Middleware setup
+app.use(express.json());
+app.use(cookieParser());
+app.use(cors({ origin: "http://51.17.202.182:3000" }));
+
+// API routes
+app.use("/api/v1", userRoutes);
+
+// Serve static files from the React app
 app.use(express.static(path.join(__dirname, "../frontend/build")));
 
-app.get("*", (req, res) =>{
+// The catch-all handler for other routes
+app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
 });
 
-app.use((err, req, res, next) =>{
+// Error handling middleware
+app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
 
-app.use(express.json());
-app.use(cookieParser());
-app.use(cors({ origin: "http://51.17.202.182:3000" }));
-app.use("/api/v1", userRoutes);
-
-app.listen(process.env.PORT, () =>{
-  console.log(
-    `Server connected to port ${process.env.PORT}`
-  );
+// Start the server
+const PORT = process.env.PORT || 5001;
+app.listen(PORT, () => {
+  console.log(`Server connected to port ${PORT}`);
 });
