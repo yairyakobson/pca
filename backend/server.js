@@ -19,6 +19,11 @@ app.get("*", (req, res) => {
   res.sendFile(path.resolve(__dirname, "../frontend/build/index.html"));
 });
 
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cors({ origin: "http://51.17.202.182:3000" }));
